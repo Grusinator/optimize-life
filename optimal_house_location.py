@@ -1,7 +1,7 @@
 import logging
 
 from house import House
-from job import Job
+from job_location import Job
 from shapely.geometry import Point
 
 from life import Life

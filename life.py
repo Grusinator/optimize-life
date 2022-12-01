@@ -1,7 +1,7 @@
 import logging
 
 from house import House
-from job import Job
+from job_location import Job
 
 logger = logging.getLogger(__name__)
 
