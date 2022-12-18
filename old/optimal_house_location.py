@@ -1,10 +1,10 @@
 import logging
 
-from house import House
-from job_location import Job
+from old.house import House
+from old.job_location import Job
 from shapely.geometry import Point
 
-from life import Life
+from old.life import Life
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
