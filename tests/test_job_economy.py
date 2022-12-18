@@ -1,4 +1,4 @@
-from job import Job
+from economic_iterators.job import Job
 from predict_future_economy import predict_future_economy
 
 
