@@ -8,5 +8,5 @@ class CostOfLiving(EconomicIterator):
     def __init__(self, monthly_expenses):
         self.monthly_expenses = monthly_expenses
 
-    def monthly_iterator(self)-> Iterator:
+    def monthly_iterator(self) -> Iterator:
         yield EconomicSituation(- self.monthly_expenses)

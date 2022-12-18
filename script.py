@@ -1,3 +1,4 @@
+from economic_iterators.company_investment_loan import CompanyInvestmentLoan
 from economic_iterators.consultancy_business import ConsultancyBusiness
 from economic_iterators.cost_of_living import CostOfLiving
 from economic_situation import EconomicSituation
@@ -9,24 +10,35 @@ if __name__ == "__main__":
     # try to run for different cases, to see what the outcome will be, fx. try to see if it makes the
     #  most sense to buy a farm as a private thing, vs as a business. How tight will my economy be etc.
     mortgage_loan = MortgageLoan(
-        amount=5000000, interest=0.05, kurs=100, payment=100000
+        amount=5000000, interest_rate=0.05, kurs=100, payment=1000000
     )
 
     job = Job(
         salary=53000
     )
+    job2 = Job(
+        salary=43000
+    )
 
     consultancy = ConsultancyBusiness(hourly_rate=750, internal_expenses=3000, allocation=1800 / 12)
+
+    company_investment = CompanyInvestmentLoan(amount=5000000, interest_rate=0.05, kurs=100, payment=1500000)
 
     # agriculture_business = AgricultureBusiness()
     #
     cost_of_living = CostOfLiving(
-        200
+        20000
     )
     economic_situation = EconomicSituation(
         private_capital=500000
     )
 
-    economy = PredictFutureEconomy(economic_situation, consultancy, cost_of_living, mortgage_loan)
-    future_economy = economy.predict_future_economy(stop=2)
-    print(future_economy)
+    economy_predictor = PredictFutureEconomy(economic_situation, cost_of_living, consultancy)
+    economy_predictor.prioritize_private = False
+    economy_predictor.predict_future_economy()
+    company_investment.down_payment = economy_predictor.economic_situation.company_capital
+    economy_predictor.conditions.append(company_investment)
+    economy_predictor.prioritize_private = True
+    economy_predictor.predict_future_economy()
+    print(company_investment.debt)
+
