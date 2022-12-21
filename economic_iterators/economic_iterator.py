@@ -7,6 +7,8 @@ from economic_situation import EconomicSituation
 class EconomicIterator(ABC):
 
     @abstractmethod
-    def monthly_iterator(self)-> Iterator:
+    def monthly_iterator(self) -> Iterator:
         pass
 
+    def execute_strategy(self, *args, **kwargs):
+        pass

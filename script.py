@@ -2,10 +2,11 @@ from economic_iterators.agriculture_business import AgricultureBusiness
 from economic_iterators.company_investment_loan import CompanyInvestmentLoan
 from economic_iterators.consultancy_business import ConsultancyBusiness
 from economic_iterators.cost_of_living import CostOfLiving
+from economic_iterators.credit_loan import CreditLoan
 from economic_situation import EconomicSituation
 from economic_iterators.job import Job
 from economic_iterators.mortgage_loan import MortgageLoan
-from predict_future_economy import PredictFutureEconomy
+from predict_future_economy import PredictFutureEconomy, EconomicStrategy
 
 if __name__ == "__main__":
     # try to run for different cases, to see what the outcome will be, fx. try to see if it makes the
@@ -25,19 +26,19 @@ if __name__ == "__main__":
 
     company_investment = CompanyInvestmentLoan(amount=4500000, interest_rate=0.0647, kurs=100, payment=1500000)
 
-    agriculture_business = AgricultureBusiness(30*3500)
+    credit_loan = CreditLoan(4500000, 0.05)
+
+    agriculture_business = AgricultureBusiness(30 * 3500)
     #
     cost_of_living = CostOfLiving(
         15000
     )
     economic_situation = EconomicSituation(
         private_capital=500000,
-        company_capital=1000000,
+        company_capital=0,
     )
+    economic_situation.invest_private_money(450000)
 
-
-
-    economy_predictor = PredictFutureEconomy(economic_situation, cost_of_living, consultancy, agriculture_business, company_investment)
-    economy_predictor.prioritize_private = False
+    economy_predictor = PredictFutureEconomy(economic_situation, cost_of_living, consultancy, agriculture_business,
+                                             credit_loan)
     economy_predictor.predict_future_economy()
-    print(company_investment.debt)

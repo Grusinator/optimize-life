@@ -11,5 +11,5 @@ class Job(EconomicIterator):
         self.salary = salary
 
     def monthly_iterator(self) -> Iterator:
-        income_after_tax = IncomeTax().calculate_income_tax_monthly(self.salary)
+        income_after_tax = IncomeTax().calculate_income_after_tax_monthly(self.salary)
         yield EconomicSituation(income_after_tax)

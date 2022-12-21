@@ -6,9 +6,10 @@ class IncomeTax:
     labour_contribution = 0.08  # arbejdsmarkedsbidrag
 
     def __init__(self):
-        pass
+        """there is something here on how to pay income tax. change year, and also when """
+        self.income_ytd = 0
 
-    def calculate_income_tax(self, income):
+    def calculate_income_after_tax(self, income):
         income = income * (1 - self.labour_contribution)
 
         income_above_tax_deduction = max(income - self.tax_deduction_yearly, 0)
@@ -20,5 +21,8 @@ class IncomeTax:
 
         return income - standard_tax - top_tax
 
-    def calculate_income_tax_monthly(self, income):
-        return self.calculate_income_tax(income * 12) / 12
+    def calculate_income_after_tax_monthly(self, income):
+        return self.calculate_income_after_tax(income * 12) / 12
+
+    def calculate_simple_income_tax_monthly(self, income):
+        return income * 0.5
