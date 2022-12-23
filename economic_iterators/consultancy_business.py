@@ -6,7 +6,7 @@ from economic_situation import EconomicSituation
 
 class ConsultancyBusiness(EconomicIterator):
 
-    def __init__(self, hourly_rate, internal_expenses, allocation: float):
+    def __init__(self, hourly_rate, internal_expenses, allocation: int):
         """
         :param hourly_rate: kr/hour
         :param internal_expenses: kr
@@ -17,8 +17,8 @@ class ConsultancyBusiness(EconomicIterator):
         self.allocation = allocation
 
     def monthly_result(self):
-        return self.hourly_rate * self.allocation - self.internal_expenses
+        return (self.hourly_rate * self.allocation - self.internal_expenses) / 12
 
-    def monthly_iterator(self)-> Iterator:
+    def monthly_iterator(self) -> Iterator:
         company_money = self.monthly_result()
         yield EconomicSituation(0, company_money)

@@ -1,7 +1,5 @@
 from abc import abstractmethod, ABC
-from typing import Generator, Iterator
-
-from economic_situation import EconomicSituation
+from typing import Iterator
 
 
 class EconomicIterator(ABC):

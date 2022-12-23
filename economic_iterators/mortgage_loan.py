@@ -1,4 +1,4 @@
-from collections import Iterator
+from typing import Iterator
 
 from economic_iterators.economic_iterator import EconomicIterator
 from economic_situation import EconomicSituation

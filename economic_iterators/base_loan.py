@@ -5,6 +5,9 @@ from economic_situation import EconomicSituation
 
 
 class Loan(EconomicIterator, metaclass=ABCMeta):
+    debt: int
+    total_payed_interest: int
+
     @abstractmethod
     def payback(self, economic_situation: EconomicSituation):
         pass
