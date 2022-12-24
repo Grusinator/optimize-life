@@ -4,6 +4,7 @@ from enum import Enum, auto
 from economic_iterators.base_loan import Loan
 from economic_iterators.economic_iterator import EconomicIterator
 from economic_situation import EconomicSituation
+from income_tax import IncomeTax
 
 
 @dataclass
@@ -14,9 +15,10 @@ class EconomicStrategy:
 
 class PredictFutureEconomy:
     def __init__(self, economic_situation: EconomicSituation, *conditions: EconomicIterator,
-                 economic_strategy: EconomicStrategy = EconomicStrategy()):
+                 economic_strategy: EconomicStrategy = EconomicStrategy(), tax_model=IncomeTax()):
         self.economic_situation = economic_situation
         self.conditions = list(conditions)
+        self.tax_model = tax_model
         self.economic_strategy = economic_strategy
         self.month = 0
         self.history = []
