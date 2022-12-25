@@ -9,7 +9,8 @@ from income_tax import IncomeTax
 
 @dataclass
 class EconomicStrategy:
-    pay_off_loans = True
+    loan_private_to_company: bool = True
+    pay_off_loans: bool = True
     transfer_income_to_private: bool = True
 
 
@@ -29,10 +30,11 @@ class PredictFutureEconomy:
             self.create_monthly_debug_message()
         return self.economic_situation
 
-    def create_monthly_debug_message(self):
-        years, months = divmod(self.month, 12)
-        message = f"year: {years + 1}, month {months}, {self.economic_situation}"
-        print(message)
+    def create_monthly_debug_message(self, every=6):
+        if divmod(self.month, every)[1] == 0:
+            years, months = divmod(self.month, 12)
+            message = f"year: {years + 1}, month {months}, {self.economic_situation}"
+            print(message)
 
     def _step_one_month_ahead(self):
         self.month += 1
@@ -43,6 +45,8 @@ class PredictFutureEconomy:
             self.pay_off_loans()
         if self.economic_strategy.transfer_income_to_private:
             self.economic_situation.transfer_to_private()
+        if self.economic_strategy.loan_private_to_company:
+            self.economic_situation.invest_private_money()
 
     def calculate_monthly_result_for_all_conditions(self):
         for condition in self.conditions:

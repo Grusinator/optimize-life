@@ -53,7 +53,7 @@ class EconomicSituation:
         self.private_capital += private_investment_payback
         return private_investment_payback
 
-    def invest_private_money(self, amount: int):
+    def invest_private_money(self, amount: int = INF):
         investment = min(amount, self.private_capital)
         self.private_investment_loan += investment
         self.private_capital -= investment
