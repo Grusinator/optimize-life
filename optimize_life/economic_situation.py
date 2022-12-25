@@ -1,6 +1,4 @@
-from dataclasses import dataclass
-
-from income_tax import IncomeTax
+from optimize_life.income_tax import IncomeTax
 
 INF = 9999999999
 

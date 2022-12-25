@@ -1,11 +1,11 @@
 from bokeh.plotting import figure, show
 
-from economic_iterators.agriculture_business import AgricultureBusiness
-from economic_iterators.consultancy_business import ConsultancyBusiness
-from economic_iterators.cost_of_living import CostOfLiving
-from economic_iterators.credit_loan import CreditLoan
-from economic_situation import EconomicSituation
-from predict_future_economy import PredictFutureEconomy
+from optimize_life.economic_iterators.agriculture_business import AgricultureBusiness
+from optimize_life.economic_iterators.consultancy_business import ConsultancyBusiness
+from optimize_life.economic_iterators.cost_of_living import CostOfLiving
+from optimize_life.economic_iterators.credit_loan import CreditLoan
+from optimize_life.economic_situation import EconomicSituation
+from optimize_life.predict_future_economy import PredictFutureEconomy
 
 
 def main():

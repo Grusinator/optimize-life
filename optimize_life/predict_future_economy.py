@@ -1,10 +1,9 @@
 from dataclasses import dataclass
-from enum import Enum, auto
 
-from economic_iterators.base_loan import Loan
-from economic_iterators.economic_iterator import EconomicIterator
-from economic_situation import EconomicSituation
-from income_tax import IncomeTax
+from optimize_life.economic_iterators.base_loan import Loan
+from optimize_life.economic_iterators.economic_iterator import EconomicIterator
+from optimize_life.economic_situation import EconomicSituation
+from optimize_life.income_tax import IncomeTax
 
 
 @dataclass

@@ -29,7 +29,8 @@ class CreditLoan(Loan):
         payback_amount *= 0.78  # payment of company taxes
         self.debt -= payback_amount
         economic_situation.company_capital -= payback_amount
-        self.create_debug_message(payback_amount)
+        # TODO logging
+        #  self.create_debug_message(payback_amount)
 
     def create_debug_message(self, payback_amount):
         print(f"payed back {payback_amount:,.0f}, debt is now: {self.debt:,.0f}")
