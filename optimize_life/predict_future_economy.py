@@ -9,6 +9,7 @@ from income_tax import IncomeTax
 
 @dataclass
 class EconomicStrategy:
+    ensure_enough_money_on_private: bool = True
     loan_private_to_company: bool = True
     pay_off_loans: bool = True
     transfer_income_to_private: bool = True
@@ -40,7 +41,8 @@ class PredictFutureEconomy:
         self.month += 1
         self.build_historic_snapshot()
         self.calculate_monthly_result_for_all_conditions()
-        self.economic_situation.ensure_enough_money_on_private()
+        if self.economic_strategy.ensure_enough_money_on_private:
+            self.economic_situation.ensure_enough_money_on_private()
         if self.economic_strategy.pay_off_loans:
             self.pay_off_loans()
         if self.economic_strategy.transfer_income_to_private:

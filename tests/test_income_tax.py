@@ -1,6 +1,6 @@
 import pytest
 
-from income_tax import IncomeTax
+from optimize_life.income_tax import IncomeTax
 
 
 @pytest.mark.parametrize("income_before_tax, exp_income_after_tax", (

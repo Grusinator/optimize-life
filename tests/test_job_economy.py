@@ -1,6 +1,6 @@
-from economic_iterators.job import Job
-from economic_situation import EconomicSituation
-from predict_future_economy import PredictFutureEconomy
+from optimize_life.economic_iterators import Job
+from optimize_life.economic_situation import EconomicSituation
+from optimize_life.predict_future_economy import PredictFutureEconomy
 
 
 def test_job_economy():

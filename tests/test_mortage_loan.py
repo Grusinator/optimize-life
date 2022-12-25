@@ -1,6 +1,6 @@
 import pytest
 
-from economic_iterators.mortgage_loan import MortgageLoan
+from optimize_life.economic_iterators.mortgage_loan import MortgageLoan
 
 
 

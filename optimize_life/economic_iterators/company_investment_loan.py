@@ -1,7 +1,7 @@
 from typing import Iterator
 
-from economic_iterators.mortgage_loan import MortgageLoan
-from economic_situation import EconomicSituation
+from optimize_life.economic_iterators.mortgage_loan import MortgageLoan
+from optimize_life.economic_situation import EconomicSituation
 
 
 class CompanyInvestmentLoan(MortgageLoan):

@@ -1,7 +1,7 @@
 from typing import Iterator
 
-from economic_iterators.base_loan import Loan
-from economic_situation import EconomicSituation
+from optimize_life.economic_iterators.base_loan import Loan
+from optimize_life.economic_situation import EconomicSituation
 
 
 class CreditLoan(Loan):

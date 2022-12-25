@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
-from economic_iterators.economic_iterator import EconomicIterator
-from economic_situation import EconomicSituation
+from optimize_life.economic_iterators.economic_iterator import EconomicIterator
+from optimize_life.economic_situation import EconomicSituation
 
 
 class Loan(EconomicIterator, metaclass=ABCMeta):
