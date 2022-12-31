@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from optimize_life.economic_conversions import EconomicConversion
 from optimize_life.economic_iterators.base_loan import Loan
 from optimize_life.economic_iterators.economic_iterator import EconomicIterator
 from optimize_life.economic_situation import EconomicSituation
@@ -40,14 +41,15 @@ class PredictFutureEconomy:
         self.month += 1
         self.build_historic_snapshot()
         self.calculate_monthly_result_for_all_conditions()
+        economic_conversion = EconomicConversion(self.tax_model, self.economic_situation)
         if self.economic_strategy.ensure_enough_money_on_private:
-            self.economic_situation.ensure_enough_money_on_private()
+            economic_conversion.ensure_enough_money_on_private()
         if self.economic_strategy.pay_off_loans:
             self.pay_off_loans()
         if self.economic_strategy.transfer_income_to_private:
-            self.economic_situation.transfer_to_private()
+            economic_conversion.transfer_to_private()
         if self.economic_strategy.loan_private_to_company:
-            self.economic_situation.invest_private_money()
+            economic_conversion.invest_private_money()
 
     def calculate_monthly_result_for_all_conditions(self):
         for condition in self.conditions:

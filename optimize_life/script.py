@@ -1,10 +1,12 @@
 from bokeh.plotting import figure, show
 
+from optimize_life.economic_conversions import EconomicConversion
 from optimize_life.economic_iterators.agriculture_business import AgricultureBusiness
 from optimize_life.economic_iterators.consultancy_business import ConsultancyBusiness
 from optimize_life.economic_iterators.cost_of_living import CostOfLiving
 from optimize_life.economic_iterators.credit_loan import CreditLoan
 from optimize_life.economic_situation import EconomicSituation
+from optimize_life.income_tax import IncomeTax
 from optimize_life.predict_future_economy import PredictFutureEconomy
 
 
@@ -31,14 +33,17 @@ def plot_investment_prediction(agro_land_ha, consultancy_allocation, cost_pr_ha,
     credit_loan = CreditLoan(total_farm_cost, loan_interest)
     agriculture_business = AgricultureBusiness((agro_land_ha * 4000) - 100000)
     cost_of_living = CostOfLiving(cost_of_living)
+    personal_tax = IncomeTax()
     economic_situation = EconomicSituation(private_capital=450000, company_capital=0)
-    economic_situation.invest_private_money(450000)
+    conversion = EconomicConversion(personal_tax, economic_situation)
+    conversion.invest_private_money(450000)
     economy_predictor = PredictFutureEconomy(
         economic_situation,
         cost_of_living,
         consultancy,
         agriculture_business,
-        credit_loan
+        credit_loan,
+        tax_model=personal_tax
     )
     economy_predictor.predict_future_economy(10 * 12)
     month, private_capital, company_capital, debt, total_payed_interest = list(zip(*economy_predictor.history))

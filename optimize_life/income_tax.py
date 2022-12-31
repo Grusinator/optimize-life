@@ -8,12 +8,17 @@ class IncomeTax:
     def __init__(self):
         """there is something here on how to pay income tax. change year, and also when """
         self.income_ytd = 0
+        self.tax_deduction_extra = 0
+
+    def add_tax_deduction(self, deduction: int):
+        self.tax_deduction_extra += deduction
 
     def calculate_income_after_tax(self, income):
         income = income * (1 - self.labour_contribution)
 
-        income_above_tax_deduction = max(income - self.tax_deduction_yearly, 0)
-        standard_taxable_income = min(self.max_tax_cutoff - self.tax_deduction_yearly, income_above_tax_deduction)
+        tax_deduction = self.tax_deduction_yearly + self.tax_deduction_extra
+        income_above_tax_deduction = max(income - tax_deduction, 0)
+        standard_taxable_income = min(self.max_tax_cutoff - tax_deduction, income_above_tax_deduction)
         standard_tax = standard_taxable_income * self.base_tax_level
 
         top_taxable_income = max(income - self.max_tax_cutoff, 0)
