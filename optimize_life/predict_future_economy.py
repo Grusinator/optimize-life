@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+import pandas as pd
+
 from optimize_life.economic_conversions import EconomicConversion
 from optimize_life.economic_iterators.base_loan import Loan
 from optimize_life.economic_iterators.economic_iterator import EconomicIterator
@@ -64,5 +66,9 @@ class PredictFutureEconomy:
         debt = sum([condition.debt for condition in self.conditions if isinstance(condition, Loan)])
         total_payed_interest = sum(
             [condition.total_payed_interest for condition in self.conditions if isinstance(condition, Loan)])
+        # TODO convert directly into dataframe
         self.history.append((self.month, self.economic_situation.private_capital,
                              self.economic_situation.company_capital, debt, total_payed_interest))
+
+    def get_historic_data(self) -> pd.DataFrame:
+        return pd.DataFrame(self.history)
