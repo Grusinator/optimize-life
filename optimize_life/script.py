@@ -45,10 +45,15 @@ def plot_investment_prediction(agro_land_ha, consultancy_allocation, cost_pr_ha,
         credit_loan,
         tax_model=personal_tax
     )
-    economy_predictor.predict_future_economy(10 * 12)
+    p = predict_and_plot(economy_predictor)
+    return p
+
+
+def predict_and_plot(economy_predictor: PredictFutureEconomy, years=10):
+    economy_predictor.predict_future_economy(years * 12)
     month, private_capital, company_capital, debt, total_payed_interest = list(zip(*economy_predictor.history))
     month = [m / 12 for m in month]
-    title = f"prediction interest:{loan_interest}, allocation: {consultancy_allocation}"
+    title = f"prediction"
     p = figure(width=1500, height=600, title=title)
     p.line(month, private_capital, line_width=2, legend_label="private")
     # p.line(month, company_capital, line_width=2, color="green", legend_label="company")
