@@ -15,7 +15,7 @@ class EconomicConversion:
 
     def ensure_enough_money_on_private(self):
         while self.economic_situation.private_capital < 0:
-            if self.economic_situation.company_capital < 0:
+            if self.economic_situation.company_capital <= 0:
                 raise Exception("You are out of money!!")
             self.transfer_to_private(1000)
 

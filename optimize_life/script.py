@@ -56,7 +56,7 @@ def predict_and_plot(economy_predictor: PredictFutureEconomy, years=10):
     title = f"prediction"
     p = figure(width=1500, height=600, title=title)
     p.line(month, private_capital, line_width=2, legend_label="private")
-    # p.line(month, company_capital, line_width=2, color="green", legend_label="company")
+    p.line(month, company_capital, line_width=2, color="green", legend_label="company")
     p.line(month, debt, line_width=2, color="black", legend_label="debt")
     p.line(month, total_payed_interest, line_width=2, color="red", legend_label="interest payed")
     return p
