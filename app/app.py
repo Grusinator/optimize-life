@@ -1,18 +1,15 @@
-import pandas as pd
 import panel as pn
-import param
 from panel.template import BootstrapTemplate
-from panel.widgets import Button
-from param import Dynamic, Parameter
-import hvplot.pandas
 
+from app.widgets.consultancy_business_widget import ConsultancyBusinessWidget
+from app.widgets.credit_loan_widget import CreditLoanWidget
 from app.widgets.economic_situation_widget import EconomicSituationWidget
 from app.widgets.economic_strategy_widget import EconomicStrategyWidget
 from app.widgets.job_widget import JobWidget
 from app.widgets.personal_expenses_widget import PersonalExpensesWidget
 from optimize_life.income_tax import IncomeTax
 from optimize_life.predict_future_economy import PredictFutureEconomy
-from optimize_life.script import plot_investment_prediction, predict_and_plot
+from optimize_life.script import predict_and_plot
 
 pn.extension(notifications=True)
 
@@ -20,7 +17,7 @@ pn.extension(notifications=True)
 class OptimizeLifeApp(BootstrapTemplate):
 
     def __init__(self):
-        self.widgets: list = [PersonalExpensesWidget(), JobWidget()]
+        self.widgets: list = [PersonalExpensesWidget(), JobWidget(), CreditLoanWidget(), ConsultancyBusinessWidget()]
         self.economic_situation_widget = EconomicSituationWidget()
         self.economic_strategy_widget = EconomicStrategyWidget()
         self.economy_predictor = PredictFutureEconomy(
@@ -50,7 +47,7 @@ class OptimizeLifeApp(BootstrapTemplate):
             pn.state.notifications.error(f'This is an error notification. {e}', duration=1000)
 
     def create_economic_iterators_from_widgets(self):
-        return [widget.get_economic_iterator() for widget in self.widgets]
+        return [widget.get_economic_iterator() for widget in self.widgets if widget.enabled]
 
     def update_economy_prediction_conditions(self):
         personal_tax = IncomeTax()
