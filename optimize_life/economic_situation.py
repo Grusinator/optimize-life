@@ -1,7 +1,3 @@
-from optimize_life.income_tax import IncomeTax
-
-
-
 class EconomicSituation:
     """used as an economic balance but also an economic result"""
 
@@ -25,7 +21,6 @@ class EconomicSituation:
         company_capital = self.company_capital - other.company_capital
         private_investment_loan = self.private_investment_loan - other.private_investment_loan
         return EconomicSituation(private_capital, company_capital, private_investment_loan)
-
 
 
 if __name__ == "__main__":

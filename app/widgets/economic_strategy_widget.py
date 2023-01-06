@@ -1,6 +1,5 @@
 import param
 
-from optimize_life.economic_situation import EconomicSituation
 from optimize_life.predict_future_economy import EconomicStrategy
 
 

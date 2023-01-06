@@ -1,12 +1,14 @@
 import panel as pn
 from panel.template import BootstrapTemplate
 
+from app.widgets.agriculture_business_widget import AgricultureBusinessWidget
 from app.widgets.consultancy_business_widget import ConsultancyBusinessWidget
 from app.widgets.credit_loan_widget import CreditLoanWidget
 from app.widgets.economic_situation_widget import EconomicSituationWidget
 from app.widgets.economic_strategy_widget import EconomicStrategyWidget
 from app.widgets.job_widget import JobWidget
-from app.widgets.personal_expenses_widget import PersonalExpensesWidget
+from app.widgets.cost_of_living_widget import CostOfLivingWidget
+from app.widgets.mortgage_loan_widget import MortgageLoanWidget
 from optimize_life.income_tax import IncomeTax
 from optimize_life.predict_future_economy import PredictFutureEconomy
 from optimize_life.script import predict_and_plot
@@ -17,12 +19,20 @@ pn.extension(notifications=True)
 class OptimizeLifeApp(BootstrapTemplate):
 
     def __init__(self):
-        self.widgets: list = [PersonalExpensesWidget(), JobWidget(), CreditLoanWidget(), ConsultancyBusinessWidget()]
-        self.economic_situation_widget = EconomicSituationWidget()
+        self.widgets: list = [
+            CostOfLivingWidget(monthly_expenses=15000),
+            JobWidget(enabled=False),
+            CreditLoanWidget(amount=5000000),
+            ConsultancyBusinessWidget(hourly_rate=750, allocation=1800),
+            AgricultureBusinessWidget(yearly_income=30 * 4000),
+            MortgageLoanWidget()
+        ]
+        self.economic_situation_widget = EconomicSituationWidget(private_capital=500000)
         self.economic_strategy_widget = EconomicStrategyWidget()
         self.economy_predictor = PredictFutureEconomy(
-            economic_situation=self.economic_situation_widget.create_economic_situation(),
-            economic_strategy=self.economic_strategy_widget.create_economic_strategy()
+            self.economic_situation_widget.create_economic_situation(),
+            *self.create_economic_iterators_from_widgets(),
+            economic_strategy=self.economic_strategy_widget.create_economic_strategy(),
         )
         self.economy_predictor.predict_future_economy()
 
@@ -44,7 +54,7 @@ class OptimizeLifeApp(BootstrapTemplate):
         try:
             self.bokeh_pane.object = self.update_economy_prediction_conditions()
         except Exception as e:
-            pn.state.notifications.error(f'This is an error notification. {e}', duration=1000)
+            pn.state.notifications.error(f'This is an error notification. {e}', duration=5000)
 
     def create_economic_iterators_from_widgets(self):
         return [widget.get_economic_iterator() for widget in self.widgets if widget.enabled]

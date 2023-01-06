@@ -1,4 +1,4 @@
-from optimize_life.economic_iterators import Job
+from optimize_life.economic_iterators.job import Job
 from optimize_life.economic_situation import EconomicSituation
 from optimize_life.predict_future_economy import PredictFutureEconomy
 
