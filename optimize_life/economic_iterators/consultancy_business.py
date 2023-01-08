@@ -21,4 +21,4 @@ class ConsultancyBusiness(EconomicIterator):
 
     def monthly_iterator(self) -> Iterator:
         company_money = self.monthly_result()
-        yield EconomicSituation(0, company_money)
+        yield EconomicSituation(0, company_profit=company_money)

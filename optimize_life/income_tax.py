@@ -30,4 +30,7 @@ class IncomeTax:
         return self.calculate_income_after_tax(income * 12) / 12
 
     def calculate_simple_income_tax_monthly(self, income):
-        return income * 0.5
+        return income * 0.55
+
+    def calculate_simple_income_tax_monthly_from_company_capital(self, income):
+        return income * (0.55 + 0.22)

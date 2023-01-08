@@ -1,20 +1,11 @@
-from dataclasses import dataclass
-
 import pandas as pd
 
 from optimize_life.economic_conversions import EconomicConversion
 from optimize_life.economic_iterators.base_loan import Loan
 from optimize_life.economic_iterators.economic_iterator import EconomicIterator
 from optimize_life.economic_situation import EconomicSituation
+from optimize_life.economic_strategy import EconomicStrategy
 from optimize_life.income_tax import IncomeTax
-
-
-@dataclass
-class EconomicStrategy:
-    ensure_enough_money_on_private: bool = True
-    loan_private_to_company: bool = True
-    pay_off_loans: bool = True
-    transfer_income_to_private: bool = True
 
 
 class PredictFutureEconomy:
@@ -44,12 +35,14 @@ class PredictFutureEconomy:
         self.build_historic_snapshot()
         self.calculate_monthly_result_for_all_conditions()
         economic_conversion = EconomicConversion(self.tax_model, self.economic_situation)
+        if self.economic_strategy.transfer_business_profit_to_capital:
+            economic_conversion.transfer_business_profit_to_capital()
         if self.economic_strategy.ensure_enough_money_on_private:
             economic_conversion.ensure_enough_money_on_private()
         if self.economic_strategy.pay_off_loans:
             self.pay_off_loans()
         if self.economic_strategy.transfer_income_to_private:
-            economic_conversion.transfer_to_private()
+            economic_conversion.transfer_from_company_profit_to_private_via_income_tax()
         if self.economic_strategy.loan_private_to_company:
             economic_conversion.invest_private_money()
 
@@ -67,8 +60,14 @@ class PredictFutureEconomy:
         total_payed_interest = sum(
             [condition.total_payed_interest for condition in self.conditions if isinstance(condition, Loan)])
         # TODO convert directly into dataframe
-        self.history.append((self.month, self.economic_situation.private_capital,
-                             self.economic_situation.company_capital, debt, total_payed_interest))
+        self.history.append((
+            self.month,
+            self.economic_situation.private_capital,
+            self.economic_situation.company_capital,
+            self.economic_situation.company_profit,
+            debt,
+            total_payed_interest
+        ))
 
     def get_historic_data(self) -> pd.DataFrame:
         return pd.DataFrame(self.history)
