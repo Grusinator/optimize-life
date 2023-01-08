@@ -25,10 +25,10 @@ class OptimizeLifeApp(BootstrapTemplate):
     def __init__(self):
         self.widgets: list = [
             CostOfLivingWidget(monthly_expenses=15000),
-            JobWidget(),
-            # CreditLoanWidget(amount=4500000),
-            # ConsultancyBusinessWidget(hourly_rate=750, allocation=1800),
-            # AgricultureBusinessWidget(yearly_income=30 * 4000),
+            # JobWidget(),
+            CreditLoanWidget(amount=4500000),
+            ConsultancyBusinessWidget(hourly_rate=750, internal_expenses=4000, allocation=1800),
+            AgricultureBusinessWidget(yearly_income=32 * 4000),
             # MortgageLoanWidget()
         ]
         self.economic_situation_widget = EconomicSituationWidget(private_capital=500000)
@@ -37,14 +37,25 @@ class OptimizeLifeApp(BootstrapTemplate):
         self.bokeh_plot = pn.pane.Bokeh(figure(), sizing_mode='stretch_both', max_height=500)
 
         self.try_calculate_prediction_and_built_plot()
-
+        clear_all_button = self.create_clear_all_widgets()
         self.column_with_widgets = pn.Column(*self.widgets, scroll=True, max_height=500)
         self.gs_layout = self.create_main_layout()
         add_widget_button = self.create_widget_selector()
-        sidebar = pn.Column(self.economic_situation_widget, self.economic_strategy_widget, add_widget_button)
+        sidebar = pn.Column(self.economic_situation_widget, self.economic_strategy_widget, clear_all_button,
+                            add_widget_button)
         self.watch_all_widgets()
         super().__init__(title="Optimize Life", main=self.gs_layout, sidebar=sidebar)
         self.calculate_prediction_and_update_plot(None)
+
+    def reset_widgets(self, event):
+        self.widgets = []
+        self.column_with_widgets.objects = []
+        self.calculate_prediction_and_update_plot()
+
+    def create_clear_all_widgets(self):
+        button = pn.widgets.Button(name="clear", height=60, type="warning")
+        button.on_click(self.reset_widgets)
+        return button
 
     def create_widget_selector(self):
         items = [(widget.name, widget.__name__) for widget in self.widget_types]

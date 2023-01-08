@@ -19,7 +19,7 @@ class CompanyCreditLoan(Loan):
             self.debt = self.amount
         interest = self.calculate_montly_interest()
         self.total_payed_interest += interest
-        yield EconomicSituation(0, company_capital=-interest)
+        yield EconomicSituation(0, company_profit=-interest)
 
     def calculate_montly_interest(self) -> int:
         return int(self.interest_rate * self.debt / 12)
