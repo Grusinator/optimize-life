@@ -1,4 +1,6 @@
 import panel as pn
+from bokeh.plotting import figure
+from panel.pane import Bokeh
 from panel.template import BootstrapTemplate
 
 from app.widgets.agriculture_business_widget import AgricultureBusinessWidget
@@ -17,47 +19,68 @@ pn.extension(notifications=True, sizing_mode="stretch_both")
 
 
 class OptimizeLifeApp(BootstrapTemplate):
+    widget_types = [CostOfLivingWidget, JobWidget, CreditLoanWidget, ConsultancyBusinessWidget,
+                    AgricultureBusinessWidget, MortgageLoanWidget]
 
     def __init__(self):
         self.widgets: list = [
             CostOfLivingWidget(monthly_expenses=15000),
-            # JobWidget(enabled=False),
-            CreditLoanWidget(amount=4500000),
-            ConsultancyBusinessWidget(hourly_rate=750, allocation=1800),
+            JobWidget(),
+            # CreditLoanWidget(amount=4500000),
+            # ConsultancyBusinessWidget(hourly_rate=750, allocation=1800),
             # AgricultureBusinessWidget(yearly_income=30 * 4000),
             # MortgageLoanWidget()
         ]
         self.economic_situation_widget = EconomicSituationWidget(private_capital=500000)
         self.economic_strategy_widget = EconomicStrategyWidget()
-        self.economy_predictor = PredictFutureEconomy(
-            self.economic_situation_widget.create_economic_situation(),
-            *self.create_economic_iterators_from_widgets(),
-            economic_strategy=self.economic_strategy_widget.create_economic_strategy(),
-        )
-        self.economy_predictor.predict_future_economy()
 
-        self.bokeh_pane = pn.pane.Bokeh(predict_and_plot(self.economy_predictor), sizing_mode='stretch_both',
-                                        max_height=500)
-        main = self.create_main()
-        sidebar = pn.Column(self.economic_situation_widget, self.economic_strategy_widget)
+        self.bokeh_plot = pn.pane.Bokeh(figure(), sizing_mode='stretch_both', max_height=500)
+
+        self.try_calculate_prediction_and_built_plot()
+
+        self.column_with_widgets = pn.Column(*self.widgets, scroll=True, max_height=500)
+        self.gs_layout = self.create_main_layout()
+        add_widget_button = self.create_widget_selector()
+        sidebar = pn.Column(self.economic_situation_widget, self.economic_strategy_widget, add_widget_button)
         self.watch_all_widgets()
-        super().__init__(title="Optimize Life", main=main, sidebar=sidebar)
+        super().__init__(title="Optimize Life", main=self.gs_layout, sidebar=sidebar)
+        self.calculate_prediction_and_update_plot(None)
 
-    def create_main(self):
-        main = pn.GridSpec(sizing_mode='stretch_both', max_height=500)
-        main[0, 0:1] = pn.Column(*self.widgets, scroll=True, max_height=500)
-        main[0, 1:4] = self.bokeh_pane
-        return main
+    def create_widget_selector(self):
+        items = [(widget.name, widget.__name__) for widget in self.widget_types]
+        button = pn.widgets.MenuButton(name="Add condition", items=items, height=60)
+        button.on_click(self.add_widget_on_click)
+        return button
+
+    def add_widget_on_click(self, event):
+        widget_name = event.new
+        widget = [widget() for widget in self.widget_types if widget.__name__ == widget_name][0]
+        self.widgets.append(widget)
+        self.column_with_widgets.append(widget)
+        self.watch_widget(widget)
+        self.calculate_prediction_and_update_plot()
+
+    def create_main_layout(self):
+        gs = pn.GridSpec(sizing_mode='stretch_both', max_height=500)
+        gs[0, 0:1] = self.column_with_widgets
+        gs[0, 1:4] = self.bokeh_plot
+        return gs
 
     def watch_all_widgets(self):
         sidebar_widgets = [self.economic_strategy_widget, self.economic_situation_widget]
         for widget in self.widgets + sidebar_widgets:
-            widget_param_names = list(set(widget.param.params().keys()) - {"name"})
-            widget.param.watch(self.update_data, widget_param_names)
+            self.watch_widget(widget)
 
-    def update_data(self, *events):
+    def watch_widget(self, widget):
+        widget_param_names = list(set(widget.param.params().keys()) - {"name"})
+        widget.param.watch(self.calculate_prediction_and_update_plot, widget_param_names)
+
+    def calculate_prediction_and_update_plot(self, *events):
+        self.bokeh_plot.object = self.try_calculate_prediction_and_built_plot()
+
+    def try_calculate_prediction_and_built_plot(self):
         try:
-            self.bokeh_pane.object = self.update_economy_prediction_conditions()
+            return self.update_economy_prediction_conditions()
         except Exception as e:
             pn.state.notifications.error(f'This is an error notification. {e}', duration=5000)
 
@@ -69,6 +92,6 @@ class OptimizeLifeApp(BootstrapTemplate):
         conditions = self.create_economic_iterators_from_widgets()
         economic_situation = self.economic_situation_widget.create_economic_situation()
         economic_strategy = self.economic_strategy_widget.create_economic_strategy()
-        self.economy_predictor = PredictFutureEconomy(economic_situation, *conditions,
-                                                      economic_strategy=economic_strategy, tax_model=personal_tax)
-        return predict_and_plot(self.economy_predictor)
+        economy_predictor = PredictFutureEconomy(economic_situation, *conditions,
+                                                 economic_strategy=economic_strategy, tax_model=personal_tax)
+        return predict_and_plot(economy_predictor)
