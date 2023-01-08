@@ -13,7 +13,7 @@ from optimize_life.income_tax import IncomeTax
 from optimize_life.predict_future_economy import PredictFutureEconomy
 from optimize_life.script import predict_and_plot
 
-pn.extension(notifications=True)
+pn.extension(notifications=True, sizing_mode="stretch_both")
 
 
 class OptimizeLifeApp(BootstrapTemplate):
@@ -21,11 +21,11 @@ class OptimizeLifeApp(BootstrapTemplate):
     def __init__(self):
         self.widgets: list = [
             CostOfLivingWidget(monthly_expenses=15000),
-            JobWidget(enabled=False),
-            CreditLoanWidget(amount=5000000),
+            # JobWidget(enabled=False),
+            CreditLoanWidget(amount=4500000),
             ConsultancyBusinessWidget(hourly_rate=750, allocation=1800),
-            AgricultureBusinessWidget(yearly_income=30 * 4000),
-            MortgageLoanWidget()
+            # AgricultureBusinessWidget(yearly_income=30 * 4000),
+            # MortgageLoanWidget()
         ]
         self.economic_situation_widget = EconomicSituationWidget(private_capital=500000)
         self.economic_strategy_widget = EconomicStrategyWidget()
@@ -36,13 +36,18 @@ class OptimizeLifeApp(BootstrapTemplate):
         )
         self.economy_predictor.predict_future_economy()
 
-        self.bokeh_pane = pn.pane.Bokeh(predict_and_plot(self.economy_predictor), sizing_mode='stretch_width')
-        main = pn.GridSpec(sizing_mode='stretch_both')
-        main[0, 0:1] = pn.Column(*self.widgets)
-        main[0, 1:2] = self.bokeh_pane
+        self.bokeh_pane = pn.pane.Bokeh(predict_and_plot(self.economy_predictor), sizing_mode='stretch_both',
+                                        max_height=500)
+        main = self.create_main()
         sidebar = pn.Column(self.economic_situation_widget, self.economic_strategy_widget)
         self.watch_all_widgets()
         super().__init__(title="Optimize Life", main=main, sidebar=sidebar)
+
+    def create_main(self):
+        main = pn.GridSpec(sizing_mode='stretch_both', max_height=500)
+        main[0, 0:1] = pn.Column(*self.widgets, scroll=True, max_height=500)
+        main[0, 1:4] = self.bokeh_pane
+        return main
 
     def watch_all_widgets(self):
         sidebar_widgets = [self.economic_strategy_widget, self.economic_situation_widget]

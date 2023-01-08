@@ -1,7 +1,7 @@
 import pytest
 
 from optimize_life.economic_iterators.agriculture_business import AgricultureBusiness
-from optimize_life.economic_iterators.credit_loan import CreditLoan
+from optimize_life.economic_iterators.company_credit_loan import CompanyCreditLoan
 from optimize_life.economic_situation import EconomicSituation
 from optimize_life.economic_strategy import EconomicStrategy
 from optimize_life.income_tax import IncomeTax
@@ -20,7 +20,7 @@ class TestPredictFutureEconomy:
         )
         conditions = [
             AgricultureBusiness(120000),
-            CreditLoan(500000, 0.05),
+            CompanyCreditLoan(500000, 0.05),
         ]
         predictor = PredictFutureEconomy(economic_situation, economic_strategy=economic_strategy, *conditions)
         predictor.predict_future_economy(24)

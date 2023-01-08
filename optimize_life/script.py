@@ -4,7 +4,7 @@ from optimize_life.economic_conversions import EconomicConversion
 from optimize_life.economic_iterators.agriculture_business import AgricultureBusiness
 from optimize_life.economic_iterators.consultancy_business import ConsultancyBusiness
 from optimize_life.economic_iterators.cost_of_living import CostOfLiving
-from optimize_life.economic_iterators.credit_loan import CreditLoan
+from optimize_life.economic_iterators.company_credit_loan import CompanyCreditLoan
 from optimize_life.economic_situation import EconomicSituation
 from optimize_life.income_tax import IncomeTax
 from optimize_life.predict_future_economy import PredictFutureEconomy
@@ -30,7 +30,7 @@ def plot_investment_prediction(agro_land_ha, consultancy_allocation, cost_pr_ha,
     total_farm_cost = house_cost + land_cost
     print(f"total farm cost: {total_farm_cost}")
     consultancy = ConsultancyBusiness(hourly_rate=750, internal_expenses=50000, allocation=consultancy_allocation)
-    credit_loan = CreditLoan(total_farm_cost, loan_interest)
+    credit_loan = CompanyCreditLoan(total_farm_cost, loan_interest)
     agriculture_business = AgricultureBusiness((agro_land_ha * 4000) - 100000)
     cost_of_living = CostOfLiving(cost_of_living)
     personal_tax = IncomeTax()

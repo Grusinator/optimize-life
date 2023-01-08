@@ -4,7 +4,7 @@ from optimize_life.economic_iterators.base_loan import Loan
 from optimize_life.economic_situation import EconomicSituation
 
 
-class CreditLoan(Loan):
+class CompanyCreditLoan(Loan):
 
     def __init__(self, amount, interest_rate):
         self.amount = amount
